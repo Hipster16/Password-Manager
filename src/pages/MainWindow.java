@@ -15,21 +15,23 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneLayout;
 
+import database.MainConnector;
 import pages.Components.PasswordBlock;
 import pages.Styles.Colorlib;
 import pages.Styles.RoundedBorder;
 
 public class MainWindow implements Colorlib {
-    public MainWindow(){
-        JFrame frame= new JFrame();
+    public JPanel centerpane;
+    public JFrame frame;
+    String tableName;
+    public MainWindow(String username){
+        tableName=username;
+        frame= new JFrame();
         frame.setSize(1100,800);
 
         JPanel Topbar=new JPanel();
         Topbar.setBackground(new Color(darkGreen));
         Topbar.setPreferredSize(new Dimension(660,frame.getHeight()/4));
-
-        JPanel panel=new JPanel();
-        panel.setBackground(Color.black);
 
         JPanel labelpanel=new JPanel();
         labelpanel.setBorder(new RoundedBorder(20, 0x000000));
@@ -45,25 +47,13 @@ public class MainWindow implements Colorlib {
         addP.add(addB);
         addP.setOpaque(false);
 
-        labelpanel.add(addP);
+        labelpanel.add(addP);        
 
-        JScrollPane centerbar=new JScrollPane(panel);
-        centerbar.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); 
-        centerbar.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
-        centerbar.getViewport().setBackground(new Color(darkGray));
-        centerbar.setLayout(new ScrollPaneLayout());
-        centerbar.setBorder(null);
-        ((JPanel)centerbar.getViewport().getView()).setLayout(new GridLayout(5,1,0,10));
-        
-        for(int i=0;i<5;i++){
-            ((JPanel)centerbar.getViewport().getView()).add(new PasswordBlock(500, 75));
-        }
-
-        JPanel centerpane=new JPanel();
+        centerpane=new JPanel();
         centerpane.setOpaque(false);
         centerpane.setLayout(new BoxLayout(centerpane, BoxLayout.Y_AXIS));
         centerpane.add(labelpanel);
-        centerpane.add(centerbar);
+        centerpane.add(panecreator(5));
 
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout(30,5));
@@ -77,6 +67,33 @@ public class MainWindow implements Colorlib {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
+    public JScrollPane panecreator(int val){
+        JPanel panel=new JPanel();
+        panel.setBackground(Color.black);
+        JScrollPane centerbar=new JScrollPane(panel);
+        try{
+        MainConnector obj= new MainConnector(tableName);
+        obj.rs=obj.statement.executeQuery(obj.selectAllFromtable());
+        centerbar.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); 
+        centerbar.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
+        centerbar.getViewport().setBackground(new Color(darkGray));
+        centerbar.setLayout(new ScrollPaneLayout());
+        centerbar.setBorder(null);
+        ((JPanel)centerbar.getViewport().getView()).setLayout(new GridLayout(5,1,0,10));
+        
+        while(obj.rs.next()){
+            ((JPanel)centerbar.getViewport().getView()).add(new PasswordBlock(500, 75,this,obj.rs));
+        }
+        obj.close();
+    }
+    catch(Exception e){
+        System.out.println("err");
+    }
+    finally{
+        return centerbar;
+    }
+
+    } 
 }
 
 class simplelabel extends JLabel implements Colorlib{
