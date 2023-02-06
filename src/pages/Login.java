@@ -10,7 +10,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
-import java.beans.Statement;
 import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
@@ -79,9 +78,10 @@ public class Login extends JFrame implements Colorlib{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				boolean flag=false;
+				String username=user.Tx.getText();
 				try{
 					LoginConnector c=new LoginConnector("person");
-					String username=user.Tx.getText();
+					username=user.Tx.getText();
 					String password=pass.Tx.getText();
 					while(c.rs.next()){
 						if(username.equals(c.rs.getString("username")) && password.equals(c.rs.getString("password")) ){
@@ -95,7 +95,7 @@ public class Login extends JFrame implements Colorlib{
 				}
 				if(flag){
 					pg.dispose();
-					new MainWindow();
+					new MainWindow(username);
 				}
 				else{
 					invalid.setText("Invalid username or password");
