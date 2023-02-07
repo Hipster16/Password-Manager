@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-abstract class dbFunctions implements dbInterface{
+abstract class dbFunctions{
   String tablename;
   public void getName(String tablename){
     this.tablename=tablename;
@@ -16,21 +16,6 @@ abstract class dbFunctions implements dbInterface{
     return "select * from "+this.tablename;
   }
 
-  @Override
-  public String createTable(String fields) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  @Override
-  public String insertIntoTable(String rows) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  @Override
-  public String updateInfile() {
-    // TODO Auto-generated method stub
-    return null;
-  }
 }
 
 public class LoginConnector extends dbFunctions

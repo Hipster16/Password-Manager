@@ -37,7 +37,7 @@ public class Login extends JFrame implements Colorlib{
     public Login(){
 		pg=this;
 		this.getContentPane().setBackground(new Color(0x101010));
-
+		
         JPanel form1=new JPanel();
 		form1.setLayout(new FlowLayout());
         form1.setPreferredSize(new Dimension(300,600));

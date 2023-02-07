@@ -22,11 +22,13 @@ import pages.Styles.RoundedBorder;
 
 public class MainWindow implements Colorlib {
     public JPanel centerpane;
+    public JScrollPane centerbar;
     public JFrame frame;
     String tableName;
     public MainWindow(String username){
         tableName=username;
         frame= new JFrame();
+        frame.requestFocus();
         frame.setSize(1100,800);
 
         JPanel Topbar=new JPanel();
@@ -54,7 +56,9 @@ public class MainWindow implements Colorlib {
         centerpane.setLayout(new BoxLayout(centerpane, BoxLayout.Y_AXIS));
         centerpane.add(labelpanel);
         centerpane.add(panecreator(5));
+        centerpane.setBorder(null);
 
+        frame.setTitle("Main Window");
         frame.setLocationRelativeTo(null);
         frame.setLayout(new BorderLayout(30,5));
         frame.add(Box.createHorizontalStrut(30),BorderLayout.WEST);
@@ -63,20 +67,20 @@ public class MainWindow implements Colorlib {
         frame.add(Topbar,BorderLayout.NORTH);
         frame.add(Box.createVerticalStrut(5),BorderLayout.SOUTH);
         frame.setMinimumSize(new Dimension(1100,800));
-        frame.getContentPane().setBackground(Color.black);
+        frame.getContentPane().setBackground(new Color(0x101010));
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
     public JScrollPane panecreator(int val){
         JPanel panel=new JPanel();
-        panel.setBackground(Color.black);
-        JScrollPane centerbar=new JScrollPane(panel);
+        panel.setBackground(new Color(0x101010));
+        centerbar=new JScrollPane(panel);
         try{
         MainConnector obj= new MainConnector(tableName);
         obj.rs=obj.statement.executeQuery(obj.selectAllFromtable());
         centerbar.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); 
         centerbar.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
-        centerbar.getViewport().setBackground(new Color(darkGray));
+        centerbar.getViewport().setBackground(new Color(0x101010));
         centerbar.setLayout(new ScrollPaneLayout());
         centerbar.setBorder(null);
         ((JPanel)centerbar.getViewport().getView()).setLayout(new GridLayout(5,1,0,10));
