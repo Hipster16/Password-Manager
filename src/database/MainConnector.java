@@ -15,12 +15,6 @@ abstract class dbFunctions{
     public String selectAllFromtable(){
       return "select * from "+this.tablename;
     }   
-  
-
-    public String getCount(){
-      return "select count(*) from "+tablename;
-    }
-
   }
 
 
@@ -59,5 +53,13 @@ public class MainConnector extends dbFunctions
             // connection close failed.
             System.err.println(e.getMessage());
           }
+      }
+
+      public String getCount(){
+        return "select count(*) from "+tablename;
+      }
+  
+      public String deleteFromTable(String user,String pass,String site){
+        return "delete from "+tablename+" where username='"+user+"' and password='"+pass+"' and Site='"+site+"'";
       }
     }

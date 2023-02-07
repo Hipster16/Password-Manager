@@ -25,7 +25,9 @@ public class MainWindow implements Colorlib {
     public JScrollPane centerbar;
     public JFrame frame;
     String tableName;
+    private String user;
     public MainWindow(String username){
+        user=username;
         tableName=username;
         frame= new JFrame();
         frame.requestFocus();
@@ -86,7 +88,7 @@ public class MainWindow implements Colorlib {
         ((JPanel)centerbar.getViewport().getView()).setLayout(new GridLayout(5,1,0,10));
         
         while(obj.rs.next()){
-            ((JPanel)centerbar.getViewport().getView()).add(new PasswordBlock(500, 75,this,obj.rs));
+            ((JPanel)centerbar.getViewport().getView()).add(new PasswordBlock(500, 75,this,obj.rs,user));
         }
         obj.close();
     }
