@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+
 abstract class dbFunctions{
   String tablename;
   public void getName(String tablename){
@@ -32,13 +33,11 @@ public class LoginConnector extends dbFunctions
           connection = DriverManager.getConnection("jdbc:sqlite:new.db");
           statement = connection.createStatement();
           statement.setQueryTimeout(30);  // set timeout to 30 sec.
-          
+
           rs = statement.executeQuery(selectAllFromtable());
         }
         catch(SQLException e)
         {
-          // if the error message is "out of memory",
-          // it probably means no database file is found
           System.err.println(e.getMessage());
         }
           
@@ -51,7 +50,6 @@ public class LoginConnector extends dbFunctions
           }
           catch(SQLException e)
           {
-            // connection close failed.
             System.err.println(e.getMessage());
           }
       }

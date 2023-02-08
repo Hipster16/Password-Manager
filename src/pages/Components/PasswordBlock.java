@@ -17,9 +17,9 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 import database.MainConnector;
 import pages.MainWindow;
+import pages.Popups;
 import pages.Styles.Colorlib;
 import pages.Styles.RoundedBorder;
 
@@ -51,9 +51,11 @@ public class PasswordBlock extends JPanel implements Colorlib {
         JLabel sitepane=new JLabel(field2);
         sitepane.setForeground(Color.white);
         
-        JButton edit = new JButton();
+        JButton edit = new JButton("edit");
+        edit.setForeground(Color.black);
+        edit.setFont(new Font("Dialog", Font.BOLD, 15));
         edit.setBackground(Color.green);
-        edit.setPreferredSize(new Dimension(100,40));
+        edit.setPreferredSize(new Dimension(100,30));
         edit.setBorder(BorderFactory.createRaisedBevelBorder());
         edit.addActionListener(new ActionListener() {
 
@@ -72,22 +74,15 @@ public class PasswordBlock extends JPanel implements Colorlib {
         delete = new JButton("X");
         delete.setBackground(new Color(red));
         delete.setForeground(Color.white);
-        delete.setPreferredSize(new Dimension(30,40));
+        delete.setPreferredSize(new Dimension(30,30));
         delete.setBorder(BorderFactory.createRaisedBevelBorder());
         delete.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFrame f=new JFrame();
-                JLabel msg=new JLabel("Are You You want to delete the password");
-                msg.setBounds(60, 20, 400, 100);
-                msg.setForeground(Color.white);
-                msg.setFont(new Font("Dialog",Font.PLAIN,20));
-                JButton b=new JButton("delete");
-                b.setBounds(100,150,100,50);
-                b.setBackground(new Color(red));
-                b.setForeground(Color.white);
-                b.addActionListener(new ActionListener() {
+                int Bounds[]={60, 20, 400, 100};
+                Popups f=new Popups("Are You You want to delete this password","Delete","Go Back",Bounds);
+                f.b.addActionListener(new ActionListener() {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -110,35 +105,20 @@ public class PasswordBlock extends JPanel implements Colorlib {
                         }
                         parent.frame.setVisible(false);
                         parent.frame.setVisible(true);
-                        f.dispose();
+                        f.f.dispose();
                     }
                     
                 });
 
-                JButton b2=new JButton("Go back");
-                b2.setBounds(300, 150, 100, 50);
-                b2.setBackground(Color.GREEN);
-                b2.setForeground(Color.white);
-                b2.addActionListener(new ActionListener() {
+                f.b2.addActionListener(new ActionListener() {
 
                     @Override
                     public void actionPerformed(ActionEvent e) {
-                        f.dispose();
+                        f.f.dispose();
                         
                     }
                     
                 });
-
-                f.add(msg);
-                f.add(b);
-                f.add(b2);
-                f.setLayout(null);
-                f.getContentPane().setBackground(new Color(darkGray));
-                f.setResizable(false);
-                f.setSize(500,300);
-                f.setLocationRelativeTo(null);
-                f.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                f.setVisible(true);
             }
             
         });

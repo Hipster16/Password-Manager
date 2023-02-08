@@ -5,6 +5,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -68,10 +72,74 @@ public class MainWindow implements Colorlib {
         frame.add(Box.createHorizontalStrut(30),BorderLayout.EAST);
         frame.add(Topbar,BorderLayout.NORTH);
         frame.add(Box.createVerticalStrut(5),BorderLayout.SOUTH);
-        frame.setMinimumSize(new Dimension(1100,800));
+        frame.setMinimumSize(new Dimension(1100,970));
         frame.getContentPane().setBackground(new Color(0x101010));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.setVisible(true);
+        frame.addWindowListener(new WindowListener() {
+
+            @Override
+            public void windowOpened(WindowEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                int bounds[]={180,40,200,100};
+                Popups f=new Popups("Logout or Exit", "Logout", "Exit",bounds);
+                f.b2.setBackground(new Color(red));
+                f.b2.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        System.exit(0);
+                    }
+                    
+                });
+                f.b.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        frame.dispose();
+                        f.f.dispose();
+                        new Login();
+                    }
+                    
+                });
+            }
+
+            @Override
+            public void windowClosed(WindowEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void windowIconified(WindowEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void windowDeiconified(WindowEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void windowActivated(WindowEvent e) {
+                // TODO Auto-generated method stub
+                
+            }
+
+            @Override
+            public void windowDeactivated(WindowEvent e) {
+                // TODO Auto-generated method stub
+                
+            } 
+            
+        });
     }
     public JScrollPane panecreator(int val){
         JPanel panel=new JPanel();
@@ -79,13 +147,18 @@ public class MainWindow implements Colorlib {
         centerbar=new JScrollPane(panel);
         try{
         MainConnector obj= new MainConnector(tableName);
+        obj.rs=obj.statement.executeQuery(obj.getCount());
+        int c=obj.rs.getInt("count(*)");
+        if(c<=5){
+            ((JPanel)centerbar.getViewport().getView()).setLayout(new GridLayout(5,1,0,10));}
+        else{
+            ((JPanel)centerbar.getViewport().getView()).setLayout(new GridLayout(c,1,0,10));}
         obj.rs=obj.statement.executeQuery(obj.selectAllFromtable());
         centerbar.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); 
         centerbar.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED); 
         centerbar.getViewport().setBackground(new Color(0x101010));
         centerbar.setLayout(new ScrollPaneLayout());
         centerbar.setBorder(null);
-        ((JPanel)centerbar.getViewport().getView()).setLayout(new GridLayout(5,1,0,10));
         
         while(obj.rs.next()){
             ((JPanel)centerbar.getViewport().getView()).add(new PasswordBlock(500, 75,this,obj.rs,user));
