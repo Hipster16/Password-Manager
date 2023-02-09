@@ -43,8 +43,8 @@ public class MainWindow implements Colorlib {
         frame.setSize(1100,800);
 
         JPanel Topbar=new JPanel();
-        Topbar.setBackground(new Color(darkGreen));
         Topbar.setPreferredSize(new Dimension(660,frame.getHeight()/4));
+        Topbar.setBackground(new Color(darkGreen));
 
         JPanel labelpanel=new JPanel();
         labelpanel.setBorder(new RoundedBorder(20, 0x000000));
@@ -77,7 +77,21 @@ public class MainWindow implements Colorlib {
                             obj.rs=obj.statement.executeQuery(obj.selectAllFromtable());
                             boolean flag=true;
                             while(obj.rs.next()){
-                                if(users.equals(obj.rs.getString("username")) && site.equals(obj.rs.getString("Site")) ){
+                                if(users.equals(obj.rs.getString("username")) && site.equals(obj.rs.getString("Site")))
+                                {
+                                    flag=false;
+                                    a.invalidLabel.setText("This account already exist");
+                                    break;
+                                }
+                                else if(((users.equals("Enter the username") || site.equalsIgnoreCase("Enter the password" )||
+                                site.equals("Enter the siteName")))){
+                                    a.invalidLabel.setText("Fill the form properly");
+                                    flag=false;
+                                    break;
+                                }
+                                else if(((users.equals("") || site.equalsIgnoreCase("" )||
+                                site.equals("")))){
+                                    a.invalidLabel.setText("Fill the form properly");
                                     flag=false;
                                     break;
                                 }
@@ -99,7 +113,6 @@ public class MainWindow implements Colorlib {
                                 a.frame.dispose();
                             }
                             else{
-                                a.invalidLabel.setText("This account already exist");
 					            a.userTxt.setText("");
 					            a.passTxt.setText("");
                                 a.siteTxt.setText("");
@@ -116,7 +129,7 @@ public class MainWindow implements Colorlib {
 
                                     @Override
                                     public void mouseMoved(MouseEvent e) {
-                                        if(a.invalidLabel.getText().equals("This account already exist")){
+                                        if(a.invalidLabel.getText().equals("This account already exist")|| a.invalidLabel.getText().equals("Fill the form properly")){
                                             a.invalidLabel.setText("");
                                             a.userTxt.requestFocus();
                                             a.passTxt.requestFocus();
