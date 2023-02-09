@@ -1,6 +1,5 @@
 package pages.Components;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -92,7 +91,7 @@ public class PasswordBlock extends JPanel implements Colorlib {
                             con.statement.executeUpdate(con.deleteFromTable(field1,field2,field3));
                             con.rs=con.statement.executeQuery(con.getCount());
                             int c=con.rs.getInt("count(*)");
-                            if(c<=5){
+                            if(c<5){
                                 ((JPanel)parent.centerbar.getViewport().getView()).setLayout(new GridLayout(5,1,0,10));
                             }
                             else{

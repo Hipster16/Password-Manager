@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import javax.xml.crypto.dsig.keyinfo.RetrievalMethod;
+
 abstract class dbFunctions{
     String tablename;
     public void getName(String tablename){
@@ -61,5 +63,9 @@ public class MainConnector extends dbFunctions
   
       public String deleteFromTable(String user,String pass,String site){
         return "delete from "+tablename+" where username='"+user+"' and password='"+pass+"' and Site='"+site+"'";
+      }
+
+      public String insertInTable(String username,String password,String sitename){
+        return "insert into "+tablename+" values (1,'"+username+"','"+password+"','"+sitename+"')";
       }
     }

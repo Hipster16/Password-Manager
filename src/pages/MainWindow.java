@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
@@ -18,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.border.LineBorder;
 
 import database.MainConnector;
 import pages.Components.PasswordBlock;
@@ -29,9 +32,11 @@ public class MainWindow implements Colorlib {
     public JScrollPane centerbar;
     public JFrame frame;
     String tableName;
+    MainWindow Mframe;
     private String user;
     public MainWindow(String username){
         user=username;
+        Mframe=this;
         tableName=username;
         frame= new JFrame();
         frame.requestFocus();
@@ -50,8 +55,92 @@ public class MainWindow implements Colorlib {
         labelpanel.add(new simplelabel("Site name"));
 
         JPanel addP=new JPanel();
-        JButton addB=new JButton();
+        JButton addB=new JButton("Add");
+        addB.setBackground(Color.green);
+        addB.setForeground(Color.BLACK);
+        addB.setFont(new Font("Dialog", Font.BOLD, 20));;
         addB.setPreferredSize(new Dimension(150,50));
+        addB.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                AddEdit a=new AddEdit("Add");
+                a.submit.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String users=a.userTxt.getText();
+                        String site=a.siteTxt.getText();
+                        String pass=a.passTxt.getText();
+                        try{
+                            MainConnector obj=new MainConnector(username);
+                            obj.rs=obj.statement.executeQuery(obj.selectAllFromtable());
+                            boolean flag=true;
+                            while(obj.rs.next()){
+                                if(users.equals(obj.rs.getString("username")) && site.equals(obj.rs.getString("Site")) ){
+                                    flag=false;
+                                    break;
+                                }
+                            }
+                            if(flag){
+                                 obj.statement.executeUpdate(obj.insertInTable(users, pass, site));
+                                 obj.rs=obj.statement.executeQuery("select * from '"+user+"' where username='"+users+"' and Site='"+site+"'");
+                                 ((JPanel)centerbar.getViewport().getView()).add(new PasswordBlock(500, 75,Mframe,obj.rs,user));
+                                 obj.rs=obj.statement.executeQuery(obj.getCount());
+                                 int c=obj.rs.getInt("count(*)");
+                                if(c<5){
+                                    ((JPanel)centerbar.getViewport().getView()).setLayout(new GridLayout(5,1,0,10));
+                                }
+                                 else{
+                                    ((JPanel)centerbar.getViewport().getView()).setLayout(new GridLayout(c,1,0,10));
+                                }
+                                Mframe.frame.setVisible(false);
+                                Mframe.frame.setVisible(true);
+                                a.frame.dispose();
+                            }
+                            else{
+                                a.invalidLabel.setText("This account already exist");
+					            a.userTxt.setText("");
+					            a.passTxt.setText("");
+                                a.siteTxt.setText("");
+					            a.userTxt.setBorder(new LineBorder(new Color(red),2));
+					            a.passTxt.setBorder(new LineBorder(new Color(red),2));
+                                a.siteTxt.setBorder(new LineBorder(new Color(red),2));
+                                a.frame.addMouseMotionListener(new MouseMotionListener() {
+
+                                    @Override
+                                    public void mouseDragged(MouseEvent e) {
+                                        // TODO Auto-generated method stub
+                                        
+                                    }
+
+                                    @Override
+                                    public void mouseMoved(MouseEvent e) {
+                                        if(a.invalidLabel.getText().equals("This account already exist")){
+                                            a.invalidLabel.setText("");
+                                            a.userTxt.requestFocus();
+                                            a.passTxt.requestFocus();
+                                            a.siteTxt.requestFocus();
+                                            a.frame.requestFocus();
+                                        }
+                                        
+                                    }
+                                    
+                                });
+                            }
+                            obj.close();
+                        }
+                        catch(Exception err){
+                            System.out.println(err);
+                        }
+                    }
+                    
+                });
+            }
+            
+        });
+
+
         addP.add(addB);
         addP.setOpaque(false);
 
