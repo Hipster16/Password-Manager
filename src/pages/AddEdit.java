@@ -19,10 +19,10 @@ import pages.Styles.Colorlib;
 import pages.Styles.RoundedBorder;
 
 public class AddEdit implements Colorlib {
-    TextBox userTxt,passTxt,siteTxt;
-    JButton submit;
-    JLabel invalidLabel;
-    JFrame frame;
+    public TextBox userTxt,passTxt,siteTxt;
+    public JButton submit;
+    public JLabel invalidLabel;
+    public JFrame frame;
     public AddEdit(String heading){
         frame=new JFrame();
 

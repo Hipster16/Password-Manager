@@ -33,7 +33,7 @@ public class MainWindow implements Colorlib {
     public JFrame frame;
     String tableName;
     MainWindow Mframe;
-    private String user;
+    public String user;
     public MainWindow(String username){
         user=username;
         Mframe=this;

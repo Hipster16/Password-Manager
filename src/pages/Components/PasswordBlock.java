@@ -7,16 +7,20 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
+
 import database.MainConnector;
+import pages.AddEdit;
 import pages.MainWindow;
 import pages.Popups;
 import pages.Styles.Colorlib;
@@ -60,12 +64,78 @@ public class PasswordBlock extends JPanel implements Colorlib {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                parent.frame.dispose();
-                JFrame f=new JFrame();
-                f.setSize(800,1100);
-                f.setLocationRelativeTo(null);
-                f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                f.setVisible(true);
+                AddEdit a=new AddEdit("Edit");
+                a.submit.addActionListener(new ActionListener() {
+
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        String users=a.userTxt.getText();
+                        String site=a.siteTxt.getText();
+                        String pass=a.passTxt.getText();
+                        try{
+                            MainConnector obj=new MainConnector(parent.user);
+                            obj.rs=obj.statement.executeQuery(obj.selectAllFromtable());
+                            boolean flag=true;
+                            while(obj.rs.next()){
+                                if(users.equals(obj.rs.getString("username")) && site.equals(obj.rs.getString("Site")) ){
+                                    flag=false;
+                                    break;
+                                }
+                            }
+                            if(flag){
+                                String userpaneTxt=userpane.getText();
+                                String sitepaneTxt=sitepane.getText();
+                                obj.statement.executeUpdate(obj.updateTable(users,pass,site,userpaneTxt,sitepaneTxt));
+                                field1=users;
+                                field2=site;
+                                field3=pass;
+                                userpane.setText(users);
+                                passpane.setText(site);
+                                sitepane.setText(pass);
+                                parent.frame.setVisible(false);
+                                parent.frame.setVisible(true);
+                                a.frame.dispose();
+                            }
+                            else{
+                                a.invalidLabel.setText("This account already exist");
+					            a.userTxt.setText("");
+					            a.passTxt.setText("");
+                                a.siteTxt.setText("");
+					            a.userTxt.setBorder(new LineBorder(new Color(red),2));
+					            a.passTxt.setBorder(new LineBorder(new Color(red),2));
+                                a.siteTxt.setBorder(new LineBorder(new Color(red),2));
+                                a.frame.addMouseMotionListener(new MouseMotionListener() {
+
+                                    @Override
+                                    public void mouseDragged(MouseEvent e) {
+                                        // TODO Auto-generated method stub
+                                        
+                                    }
+
+                                    @Override
+                                    public void mouseMoved(MouseEvent e) {
+                                        if(a.invalidLabel.getText().equals("This account already exist")){
+                                            a.invalidLabel.setText("");
+                                            a.userTxt.requestFocus();
+                                            a.passTxt.requestFocus();
+                                            a.siteTxt.requestFocus();
+                                            a.frame.requestFocus();
+                                        }
+                                        
+                                    }
+                                    
+                                });
+                            }
+                            obj.close();
+                        }
+                        catch(Exception err){
+                            System.out.println(err);
+                        }
+                        
+                    }
+
+                    
+                });
             }
             
         });
