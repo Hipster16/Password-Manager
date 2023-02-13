@@ -44,7 +44,7 @@ public class MainWindow implements Colorlib {
 
         JPanel Topbar=new JPanel();
         Topbar.setPreferredSize(new Dimension(660,frame.getHeight()/4));
-        Topbar.setBackground(new Color(darkGreen));
+        Topbar.setBackground(new Color(lightGray));
 
         JPanel labelpanel=new JPanel();
         labelpanel.setBorder(new RoundedBorder(20, 0x000000));

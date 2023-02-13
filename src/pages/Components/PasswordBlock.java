@@ -85,6 +85,15 @@ public class PasswordBlock extends JPanel implements Colorlib {
                         try {
                             MainConnector obj = new MainConnector(parent.user);
                             boolean flag = true;
+                            obj.rs=obj.statement.executeQuery(obj.selectAllFromtable());
+                            while(obj.rs.next()){
+                                if(users.equals(obj.rs.getString("username")) && site.equals(obj.rs.getString("Site")) && !user.equals(userpane.getText()) &&!site.equals(sitepane.getText()))
+                                {
+                                    flag=false;
+                                    a.invalidLabel.setText("This account already exist");
+                                    break;
+                                }
+                            }
                             if (((users.equals("Enter the username") || site.equalsIgnoreCase("Enter the password") ||
                                     site.equals("Enter the siteName")))) {
                                 a.invalidLabel.setText("Fill the form properly");

@@ -36,6 +36,7 @@ public class Popups implements Colorlib {
         f.add(b2);
         f.setLayout(null);
         f.getContentPane().setBackground(new Color(darkGray));
+        
         f.setResizable(false);
         f.setSize(500,300);
         f.setLocationRelativeTo(null);
